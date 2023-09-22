@@ -3,6 +3,7 @@ package obligatorio1.soliflips;
 public class Soliflips {
     
     public static void SetUp(int filas, int columnas) {
+        //fgjjf
         for (int i = -1; i < filas; i++){
             for (int j = -1; j < columnas; j++){
                 if (i == -1){

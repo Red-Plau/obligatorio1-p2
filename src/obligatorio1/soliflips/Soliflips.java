@@ -1,16 +1,16 @@
 package obligatorio1.soliflips;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class Soliflips {
     
-    public static void SetUp(int filas, int columnas) {
-        String RED = "\u001B[31m";
+    public static void SetUp() {
         Scanner in = new Scanner(System.in);
         System.out.println("Desea jugar?");
         String ent = in.nextLine();
         if (ent.equalsIgnoreCase("SI")){
-            System.out.println(RED + "a) Tomar los datos del archivo \"datos.txt\"");
+            System.out.println("a) Tomar los datos del archivo \"datos.txt\"");
             System.out.println("b) Usar el tablero predefinido");
             System.out.println("c) Usar un tablero al azar");
             
@@ -23,11 +23,20 @@ public class Soliflips {
             }
             else if (ent.equalsIgnoreCase("c")){
                 //crear tabla con matriz[fila][columna] random
+                System.out.println("Ingrese cantidad de filas (entre 3 y 9)");
+                int filas = in.nextInt();
+                System.out.println("Ingrese cantidad de columnas (entre 3 y 9)");
+                int col = in.nextInt();
+                System.out.println("Ingrese nivel de dificultad (entre 1 y 8)");
+                int nivel = in.nextInt();
+                
+                String[][] tabla = randomMat(filas, col, nivel);
+                crearTabla(tabla);
             }
         }
     }
     
-    public static void crearTabla(int[][] mat){
+    public static void crearTabla(String[][] mat){
         int filas = mat.length;
         int columnas = mat[0].length;
                 
@@ -68,6 +77,52 @@ public class Soliflips {
         }
     }
     
+    public static String[][] randomMat(int filas, int col, int nivel){
+        //String RED = "\u001B[31m";
+        String BLUE = "\u001B[34m";
+        String RESET = "\033[0m";
+        String[][] res = new String[filas][col];
+        for (int i = 0; i < filas; i++){
+            for (int j = 0; j < col; j++){
+                res[i][j] = BLUE + String.valueOf(random()) + RESET;
+            }
+        }
+        
+        for (int i = 0; i < nivel; i++) {
+            Random r = new Random();
+            int filaR = r.nextInt(filas);
+            int colR = r.nextInt(col);
+            String sym = res[filaR][colR];
+            System.out.println(filaR+1 + ", " + (colR+1));
+            if (sym.contains("-")){
+                for (int j = 0; j < col; j++){
+                    if (res[filaR][j].contains("\u001B[34m")){
+                        String cambio = res[filaR][j].replace("\u001B[34m", "\u001B[31m");
+                        res[filaR][j] = cambio;
+                    }else{
+                        String cambio = res[filaR][j].replace("\u001B[31m", "\u001B[34m");
+                        res[filaR][j] = cambio;
+                    }
+                }
+            }else if (sym.contains("|")){
+                for (int j = 0; j < filas; j++){
+                    if (res[j][colR].contains("\u001B[34m")){
+                        String cambio = res[j][colR].replace("\u001B[34m", "\u001B[31m");
+                        res[j][colR] = cambio;
+                    }else{
+                        String cambio = res[j][colR].replace("\u001B[31m", "\u001B[34m");
+                        res[j][colR] = cambio;
+                    }
+                }
+            }
+        }
+        
+        return res;
+    }
+        
+                
+                    
+    
     public static char random(){
         double value = Math.random();
         char res;
@@ -84,7 +139,7 @@ public class Soliflips {
     }
     
     public static void main(String[] args) {
-        SetUp(3, 4);
+       SetUp();
     }
     
 }

@@ -22,9 +22,15 @@ public class Soliflips {
                // Tableros.predefinido();
             }
             else if (ent.equalsIgnoreCase("c")){
-                
+                //crear tabla con matriz[fila][columna] random
             }
         }
+    }
+    
+    public static void crearTabla(int[][] mat){
+        int filas = mat.length;
+        int columnas = mat[0].length;
+                
         for (int i = -1; i < filas; i++){
             for (int j = -1; j < columnas; j++){
                 if (i == -1){
@@ -40,7 +46,7 @@ public class Soliflips {
                     } else {
                         //if letrita == R ...... (en rojo)
                         //else ..... (en azul)
-                        System.out.print("| " + j + " ");
+                        System.out.print("| " + mat[i][j] + " ");
                     }
                 }
             }
@@ -64,7 +70,7 @@ public class Soliflips {
     
     public static char random(){
         double value = Math.random();
-        char res = ' ';
+        char res;
         if (value < 0.25){
             res = '/';
         }else if (value < 0.50){
@@ -82,3 +88,4 @@ public class Soliflips {
     }
     
 }
+

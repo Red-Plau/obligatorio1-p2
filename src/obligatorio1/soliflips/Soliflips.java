@@ -95,7 +95,7 @@ public class Soliflips {
             String sym = res[filaR][colR];
             System.out.println(filaR+1 + ", " + (colR+1));
             if (sym.contains("-")){
-                for (int j = 0; j < col; j++){
+                for (int j = 0; j < col; j++) {
                     if (res[filaR][j].contains("\u001B[34m")){
                         String cambio = res[filaR][j].replace("\u001B[34m", "\u001B[31m");
                         res[filaR][j] = cambio;
@@ -104,7 +104,7 @@ public class Soliflips {
                         res[filaR][j] = cambio;
                     }
                 }
-            }else if (sym.contains("|")){
+            }else if (sym.contains("|")) {
                 for (int j = 0; j < filas; j++){
                     if (res[j][colR].contains("\u001B[34m")){
                         String cambio = res[j][colR].replace("\u001B[34m", "\u001B[31m");
@@ -114,15 +114,61 @@ public class Soliflips {
                         res[j][colR] = cambio;
                     }
                 }
+            }else if (sym.contains("/")) {
+                int y = filaR;
+                for (int j = colR; j <= col-1 && y >= 0; j++) {
+                    if (res[y][j].contains("\u001B[34m")) {
+                        String cambio = res[y][j].replace("\u001B[34m", "\u001B[31m");
+                        res[y][j] = cambio;
+                        y--;
+                    } else {
+                        String cambio = res[y][j].replace("\u001B[31m", "\u001B[34m");
+                        res[y][j] = cambio;
+                        y--;
+                    }
+                }
+                y = filaR+1;
+                for (int j = colR-1; j >= 0 && y <= filas-1; j--) {
+                    if (res[y][j].contains("\u001B[34m")) {
+                        String cambio = res[y][j].replace("\u001B[34m", "\u001B[31m");
+                        res[y][j] = cambio;
+                        y++;
+                    } else {
+                        String cambio = res[y][j].replace("\u001B[31m", "\u001B[34m");
+                        res[y][j] = cambio;
+                        y++;
+                    }
+                }
+            } else {
+                int y = filaR;
+                for (int j = colR; j >= 0 && y >= 0; j--) {
+                    if (res[y][j].contains("\u001B[34m")) {
+                        String cambio = res[y][j].replace("\u001B[34m", "\u001B[31m");
+                        res[y][j] = cambio;
+                        y--;
+                    } else {
+                        String cambio = res[y][j].replace("\u001B[31m", "\u001B[34m");
+                        res[y][j] = cambio;
+                        y--;
+                    }
+                }
+                y = filaR+1;
+                for (int j = colR+1; j <= col-1 && y <= filas-1; j++) {
+                    if (res[y][j].contains("\u001B[34m")) {
+                        String cambio = res[y][j].replace("\u001B[34m", "\u001B[31m");
+                        res[y][j] = cambio;
+                        y++;
+                    } else {
+                        String cambio = res[y][j].replace("\u001B[31m", "\u001B[34m");
+                        res[y][j] = cambio;
+                        y++;
+                    }
+                }
             }
         }
-        
         return res;
     }
         
-                
-                    
-    
     public static char random(){
         double value = Math.random();
         char res;
@@ -143,4 +189,3 @@ public class Soliflips {
     }
     
 }
-

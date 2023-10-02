@@ -7,6 +7,7 @@ public class Tablero {
     private String[][] tabla;
     private int[] solucion;
     private int nivel;
+    //agregar arraylist de movimientos
     
     public void setSolucion(String[][] unaTabla) {
         tabla = unaTabla;

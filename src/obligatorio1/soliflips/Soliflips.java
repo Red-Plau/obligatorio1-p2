@@ -3,8 +3,49 @@ package obligatorio1.soliflips;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Soliflips {
+public class Tablero {
+    private String[][] tabla;
+    private int[] solucion;
+    private int nivel;
     
+    public void setSolucion(String[][] unaTabla) {
+        tabla = unaTabla;
+    }
+    
+    public String[][] getTabla() {
+        return tabla;
+    }
+    
+    public void setSolucion(int[] unaSolucion) {
+        solucion = unaSolucion;
+    }
+    
+    public int[] getSolucion() {
+        return solucion;
+    }
+    
+    public void setNivel(int unNivel) {
+        nivel = unNivel;
+    }
+    
+    public int getNivel() {
+        return nivel;
+    }
+    
+    public Tablero() {
+        tabla = new int[0][0];
+        solucion = new int[0];
+        nivel = 0;
+    }
+    
+    public Tablero(int cantFilas, int cantColumnas, int unNivel) {
+        tabla = new int[cantFilas][cantColumnas];
+        solucion = new int[unNivel]; //en random agregar array de solucion
+        nivel = unNivel;
+    }
+}
+
+public class Soliflips {
     public static void SetUp() {
         Scanner in = new Scanner(System.in);
         System.out.println("Desea jugar?");
@@ -30,15 +71,15 @@ public class Soliflips {
                 System.out.println("Ingrese nivel de dificultad (entre 1 y 8)");
                 int nivel = in.nextInt();
                 
-                String[][] tabla = randomMat(filas, col, nivel);
+                String[][] tabla = randomTabla(filas, col, nivel);
                 crearTabla(tabla);
             }
         }
     }
     
-    public static void crearTabla(String[][] mat){
-        int filas = mat.length;
-        int columnas = mat[0].length;
+    public static void crearTabla(String[][] unaTabla){
+        int filas = unaTabla.length;
+        int columnas = unaTabla[0].length;
                 
         for (int i = -1; i < filas; i++){
             for (int j = -1; j < columnas; j++){
@@ -55,7 +96,7 @@ public class Soliflips {
                     } else {
                         //if letrita == R ...... (en rojo)
                         //else ..... (en azul)
-                        System.out.print("| " + mat[i][j] + " ");
+                        System.out.print("| " + unaTabla[i][j] + " ");
                     }
                 }
             }
@@ -77,7 +118,48 @@ public class Soliflips {
         }
     }
     
-    public static String[][] randomMat(int filas, int col, int nivel){
+    public static void crearTablaConCambio(String[][] unaTablaSinCambio, String[][] unaTablaConCambio) {
+      int filas = unaTablaSinCambio.length;
+        int columnas = unaTablaSinCambio[0].length * 2; //como tenemos que imprimir dos matrices, van a haber doble la cantidad de columnas
+                
+        for (int i = -1; i < filas; i++){
+            for (int j = -1; j < columnas; j++){
+                if (i == -1){
+                    if (j == -1){
+                        System.out.print("   ");
+                    } else {
+                        System.out.print(" " + (j+1) + " ");
+                    }
+                    System.out.print(" ");
+                } else {
+                    if (j == -1){
+                        System.out.print(" " + (i+1) + " ");
+                    } else {
+                        //if letrita == R ...... (en rojo)
+                        //else ..... (en azul)
+                        System.out.print("| " + unaTablaSinCambio[i][j] + " ");
+                    }
+                }
+            }
+            
+            if (i == -1){
+                System.out.println();
+            } else {
+                System.out.println("|");
+            }
+            
+            for (int j = -1; j < columnas; j++){
+                if (j == -1){
+                    System.out.print("   ");
+                } else {
+                    System.out.print("+---");
+                }
+            }
+            System.out.println("+");
+        }  
+    }
+    
+    public static String[][] randomTabla(int filas, int col, int nivel){
         //String RED = "\u001B[31m";
         String BLUE = "\u001B[34m";
         String RESET = "\033[0m";
@@ -187,5 +269,4 @@ public class Soliflips {
     public static void main(String[] args) {
        SetUp();
     }
-    
 }

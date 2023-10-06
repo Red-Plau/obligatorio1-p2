@@ -7,48 +7,41 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Tablero {
-    private String[][] tabla;
-    private int[] solucion;
-    private int nivel;
-    //agregar arraylist de movimientos
-    
-    public void setSolucion(String[][] unaTabla) {
-        tabla = unaTabla;
-    }
-    
-    public String[][] getTabla() {
-        return tabla;
-    }
-    
-    public void setSolucion(int[] unaSolucion) {
-        solucion = unaSolucion;
-    }
-    
-    public int[] getSolucion() {
-        return solucion;
-    }
-    
-    public void setNivel(int unNivel) {
-        nivel = unNivel;
-    }
-    
-    public int getNivel() {
-        return nivel;
-    }
-    
-    public Tablero() {
-        tabla = new String[0][0];
-        solucion = new int[0];
-        nivel = 0;
-    }
-    
-    public Tablero(int cantFilas, int cantColumnas, int unNivel) {
-        tabla = new String[cantFilas][cantColumnas];
-        solucion = new int[unNivel]; //en random agregar array de solucion
-        nivel = unNivel;
-    }
-}
+//public class Ficha{
+//    private char ficha;
+//    private String color;
+//    
+//    public void setFicha (char unaFicha){
+//        ficha = unaFicha;
+//    }
+//    
+//    public char getFicha (){
+//        return ficha;
+//    }
+//    
+//    public void setColor (String unColor){
+//        color = unColor;
+//    }
+//    
+//    public String getColor (){
+//        return color;
+//    }
+//    
+//    public static char random(){
+//        double value = Math.random();
+//        char res;
+//        if (value < 0.25){
+//            res = '/';
+//        }else if (value < 0.50){
+//            res = '-';
+//        }else if (value < 0.75){
+//            res = '\\';
+//        }else{
+//            res = '|';
+//        }
+//        return res;
+//    }
+//}
 
 public class Soliflips {
     public static void SetUp() {

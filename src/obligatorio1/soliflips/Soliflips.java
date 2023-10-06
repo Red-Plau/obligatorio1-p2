@@ -2,6 +2,7 @@ package obligatorio1.soliflips;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -54,39 +55,80 @@ public class Soliflips {
             System.out.println("c) Usar un tablero al azar");
             
             ent = in.nextLine();
-            if (ent.equalsIgnoreCase("a")){
-                try {
-                    leerTxt();
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(Soliflips.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            else if (ent.equalsIgnoreCase("b")){
-               // Tableros.predefinido();
-                String R = "\u001B[31m";
-                String B = "\u001B[34m";
-                String Rs = "\033[0m";
-                String[][] predef = {
-                    {B + "|" + Rs, B + "|" + Rs, R + "-" + Rs, B + "/" + Rs, R + "|" + Rs, R + "-" + Rs},
-                    {R + "-" + Rs, B + "/" + Rs, B + "/" + Rs, B + "|" + Rs, R + "-" + Rs, R + "-" + Rs},
-                    {R + "-" + Rs, R + "-" + Rs, B + "|" + Rs, R + "-" + Rs, R + "/" + Rs, R + "-" + Rs},
-                    {R + "\\" + Rs, R + "-" + Rs, R + "|" + Rs, R + "\\" + Rs, B + "|" + Rs, R + "|" + Rs},
-                    {R + "\\" + Rs, R + "/" + Rs, R + "/" + Rs, B + "|" + Rs, B + "/" + Rs, B + "\\" + Rs}
-                };
-                    
-                crearTabla(predef);
-            }
-            else if (ent.equalsIgnoreCase("c")){
-                //crear tabla con matriz[fila][columna] random
-                System.out.println("Ingrese cantidad de filas (entre 3 y 9)");
-                int filas = in.nextInt();
-                System.out.println("Ingrese cantidad de columnas (entre 3 y 9)");
-                int col = in.nextInt();
-                System.out.println("Ingrese nivel de dificultad (entre 1 y 8)");
-                int nivel = in.nextInt();
+            if ((ent.equalsIgnoreCase("a")) || (ent.equalsIgnoreCase("b")) || (ent.equalsIgnoreCase("c"))){
+                String[][] tabla = null;
+                int nivel = 0;
                 
-                String[][] tabla = randomTabla(filas, col, nivel);
+                if (ent.equalsIgnoreCase("a")){
+                    try {
+                        leerTxt();
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(Soliflips.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                else if (ent.equalsIgnoreCase("b")){
+                   // Tableros.predefinido();
+                    String R = "\u001B[31m";
+                    String B = "\u001B[34m";
+                    String Rs = "\033[0m";
+
+                    String[][] predef = {
+                        {B + "|" + Rs, B + "|" + Rs, R + "-" + Rs, B + "/" + Rs, R + "|" + Rs, R + "-" + Rs},
+                        {R + "-" + Rs, B + "/" + Rs, B + "/" + Rs, B + "|" + Rs, R + "-" + Rs, R + "-" + Rs},
+                        {R + "-" + Rs, R + "-" + Rs, B + "|" + Rs, R + "-" + Rs, R + "/" + Rs, R + "-" + Rs},
+                        {R + "\\" + Rs, R + "-" + Rs, R + "|" + Rs, R + "\\" + Rs, B + "|" + Rs, R + "|" + Rs},
+                        {R + "\\" + Rs, R + "/" + Rs, R + "/" + Rs, B + "|" + Rs, B + "/" + Rs, B + "\\" + Rs}
+                    };
+
+                    tabla = predef;
+                    nivel = 3;
+                }
+                else {
+                    //crear tabla con matriz[fila][columna] random
+                    System.out.println("Ingrese cantidad de filas (entre 3 y 9)");
+                    int filas = in.nextInt();
+                    System.out.println("Ingrese cantidad de columnas (entre 3 y 9)");
+                    int col = in.nextInt();
+                    System.out.println("Ingrese nivel de dificultad (entre 1 y 8)");
+                    nivel = in.nextInt();
+
+                    tabla = randomTabla(filas, col, nivel);
+                }
+                
                 crearTabla(tabla);
+                Tablero tableroInicial = new Tablero(tabla.length, tabla[0].length, nivel);
+                tableroInicial.setTabla(tabla);
+                Juego empezarJuego = new Juego(tableroInicial);
+                Jugar(empezarJuego);
+            } else {
+                   
+            }
+        }
+    }
+    
+    public static boolean seGano() {
+        //func
+        return true;
+    }
+    
+    public static void Jugar(Juego controlJuego){
+        Scanner input = new Scanner(System.in);
+        
+        while (!seGano()){
+            int[] movimiento = new int[2];
+            movimiento[0] = input.nextInt();
+            
+            if(movimiento[0] != -1){
+                movimiento[1] = input.nextInt();
+                controlJuego.addHistorialMovimiento(movimiento);
+                //sigue el juego
+            } else {
+                if(movimiento[0] != -1){
+                    controlJuego.deleteLastTablero();
+                    controlJuego.deleteLastMovimiento();
+                    
+                    crearTabla(controlJuego.getLastTablero().getTabla());
+                }
             }
         }
     }

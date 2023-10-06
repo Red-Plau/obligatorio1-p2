@@ -1,12 +1,17 @@
 package obligatorio1.soliflips;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Tablero {
     private String[][] tabla;
     private int[] solucion;
     private int nivel;
+    //agregar arraylist de movimientos
     
     public void setSolucion(String[][] unaTabla) {
         tabla = unaTabla;
@@ -57,10 +62,26 @@ public class Soliflips {
             
             ent = in.nextLine();
             if (ent.equalsIgnoreCase("a")){
-                //SIScanner input = new Scanner(new File(".\\Test\\datos.txt")); 
+                try {
+                    leerTxt();
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Soliflips.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             else if (ent.equalsIgnoreCase("b")){
                // Tableros.predefinido();
+                String R = "\u001B[31m";
+                String B = "\u001B[34m";
+                String Rs = "\033[0m";
+                String[][] predef = {
+                    {B + "|" + Rs, B + "|" + Rs, R + "-" + Rs, B + "/" + Rs, R + "|" + Rs, R + "-" + Rs},
+                    {R + "-" + Rs, B + "/" + Rs, B + "/" + Rs, B + "|" + Rs, R + "-" + Rs, R + "-" + Rs},
+                    {R + "-" + Rs, R + "-" + Rs, B + "|" + Rs, R + "-" + Rs, R + "/" + Rs, R + "-" + Rs},
+                    {R + "\\" + Rs, R + "-" + Rs, R + "|" + Rs, R + "\\" + Rs, B + "|" + Rs, R + "|" + Rs},
+                    {R + "\\" + Rs, R + "/" + Rs, R + "/" + Rs, B + "|" + Rs, B + "/" + Rs, B + "\\" + Rs}
+                };
+                    
+                crearTabla(predef);
             }
             else if (ent.equalsIgnoreCase("c")){
                 //crear tabla con matriz[fila][columna] random
@@ -75,6 +96,44 @@ public class Soliflips {
                 crearTabla(tabla);
             }
         }
+    }
+    
+    public static void leerTxt() throws FileNotFoundException{
+        
+        try {
+            String Rs = "\033[0m";
+            File file = new File(".\\Test\\datos.txt");
+            Scanner in = new Scanner(file);
+            int m = in.nextInt();
+            int n = in.nextInt();           
+            in.nextLine();
+            String[][] mat = new String[m][n];
+            for (int i = 0; i < m; i++) {
+                String fila = in.nextLine();
+                String[] lista = fila.split(" ");
+                for (int j = 0; j < n; j++) {
+                    String color = obtenerCodigoColor(lista[j].substring(1));
+                    String resto = (lista[j].substring(0, 1));
+                    mat[i][j] = color + resto + Rs;
+                }
+            }
+            int nivel = in.nextInt();
+            in.nextLine();
+                   
+                      
+            in.close();    
+            crearTabla(mat);  
+            } catch (FileNotFoundException e) {
+                System.out.println("Error.");
+        }
+    }
+    
+    public static String obtenerCodigoColor(String codigo) {
+        return switch (codigo) {
+            case "R" -> "\u001B[31m";
+            case "A" -> "\u001B[34m";
+            default -> "";
+        };
     }
     
     public static void crearTabla(String[][] unaTabla){
@@ -100,7 +159,7 @@ public class Soliflips {
                     }
                 }
             }
-            
+          
             if (i == -1){
                 System.out.println();
             } else {
@@ -166,7 +225,7 @@ public class Soliflips {
         String[][] res = new String[filas][col];
         for (int i = 0; i < filas; i++){
             for (int j = 0; j < col; j++){
-                res[i][j] = BLUE + String.valueOf(random()) + RESET;
+                res[i][j] = BLUE + String.valueOf(random()) + RESET;               
             }
         }
         
@@ -247,7 +306,7 @@ public class Soliflips {
                     }
                 }
             }
-        }
+        }     
         return res;
     }
         

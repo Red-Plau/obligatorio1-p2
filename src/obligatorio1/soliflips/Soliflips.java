@@ -45,6 +45,8 @@ import java.util.logging.Logger;
 //}
 
 public class Soliflips {
+    private static Tablero tableroInicial;
+    
     public static void SetUp() {
         Scanner in = new Scanner(System.in);
         System.out.println("Desea jugar?");
@@ -66,8 +68,7 @@ public class Soliflips {
                         Logger.getLogger(Soliflips.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                else if (ent.equalsIgnoreCase("b")){
-                   // Tableros.predefinido();
+                else if (ent.equalsIgnoreCase("b")){                   
                     String R = "\u001B[31m";
                     String B = "\u001B[34m";
                     String Rs = "\033[0m";
@@ -95,11 +96,13 @@ public class Soliflips {
                     tabla = randomTabla(filas, col, nivel);
                 }
                 
-                crearTabla(tabla);
-                Tablero tableroInicial = new Tablero(tabla.length, tabla[0].length, nivel);
-                tableroInicial.setTabla(tabla);
+                crearTablero(tabla);
+                Tabla tablaInicial = new Tabla(tabla);
+                Tablero tableroInicial = new Tablero(tablaInicial, nivel);
+                //tableroInicial.setTabla(tabla);
                 Juego empezarJuego = new Juego(tableroInicial);
                 Jugar(empezarJuego);
+            
             } else {
                    
             }
@@ -108,7 +111,7 @@ public class Soliflips {
     
     public static boolean seGano() {
         //func
-        return true;
+        return false;
     }
     
     public static void Jugar(Juego controlJuego){
@@ -116,21 +119,111 @@ public class Soliflips {
         
         while (!seGano()){
             int[] movimiento = new int[2];
-            movimiento[0] = input.nextInt();
+            movimiento[0] = input.nextInt();            
             
             if(movimiento[0] != -1){
                 movimiento[1] = input.nextInt();
+                
                 controlJuego.addHistorialMovimiento(movimiento);
+                
+                //String[][] cambiada = cambiarTabla(tableroInicial.getTabla(), movimiento);
+                Tabla cambiada = tableroInicial.getTabla().cambiarTabla(tableroInicial.getTabla(), movimiento);
+                
+                crearTableroConCambio(ksafsakfjh, cambiada.getSTabla());
+                
                 //sigue el juego
             } else {
-                if(movimiento[0] != -1){
+                if(movimiento[0] == -1){
                     controlJuego.deleteLastTablero();
                     controlJuego.deleteLastMovimiento();
                     
-                    crearTabla(controlJuego.getLastTablero().getTabla());
+                    crearTablero(controlJuego.getLastTablero().getTabla());
                 }
             }
         }
+    }
+    
+    public static String[][] cambiarTabla(String[][] actual, int[] mov){
+        //String[][] res = new String[actual.length][actual[0].length];
+        String[][] res = actual;
+        int filas = actual.length;
+        int col = actual[0].length;
+        int filaC = mov[0];
+        int colC = mov[1];
+        String sym = actual[filaC][colC];
+        
+        if (sym.contains("-")){
+            for (int j = 0; j < col; j++) {
+                if (res[filaC][j].contains("\u001B[34m")){
+                    String cambio = res[filaC][j].replace("\u001B[34m", "\u001B[31m");
+                    res[filaC][j] = cambio;
+                }else{
+                    String cambio = res[filaC][j].replace("\u001B[31m", "\u001B[34m");
+                    res[filaC][j] = cambio;
+                }
+            }
+        }else if (sym.contains("|")) {
+            for (int j = 0; j < filas; j++){
+                if (res[j][colC].contains("\u001B[34m")){
+                    String cambio = res[j][colC].replace("\u001B[34m", "\u001B[31m");
+                    res[j][colC] = cambio;
+                }else{
+                    String cambio = res[j][colC].replace("\u001B[31m", "\u001B[34m");
+                    res[j][colC] = cambio;
+                }
+            }
+        }else if (sym.contains("/")) {
+            int y = filaC;
+            for (int j = colC; j <= col-1 && y >= 0; j++) {
+                if (res[y][j].contains("\u001B[34m")) {
+                    String cambio = res[y][j].replace("\u001B[34m", "\u001B[31m");
+                    res[y][j] = cambio;
+                    y--;
+                } else {
+                    String cambio = res[y][j].replace("\u001B[31m", "\u001B[34m");
+                    res[y][j] = cambio;
+                    y--;
+                }
+            }
+            y = filaC+1;
+            for (int j = colC-1; j >= 0 && y <= filas-1; j--) {
+                if (res[y][j].contains("\u001B[34m")) {
+                    String cambio = res[y][j].replace("\u001B[34m", "\u001B[31m");
+                    res[y][j] = cambio;
+                    y++;
+                } else {
+                    String cambio = res[y][j].replace("\u001B[31m", "\u001B[34m");
+                    res[y][j] = cambio;
+                    y++;
+                }
+            }
+        } else {
+            int y = filaC;
+            for (int j = colC; j >= 0 && y >= 0; j--) {
+                if (res[y][j].contains("\u001B[34m")) {
+                    String cambio = res[y][j].replace("\u001B[34m", "\u001B[31m");
+                    res[y][j] = cambio;
+                    y--;
+                } else {
+                    String cambio = res[y][j].replace("\u001B[31m", "\u001B[34m");
+                    res[y][j] = cambio;
+                    y--;
+                }
+            }
+            y = filaC+1;
+            for (int j = colC+1; j <= col-1 && y <= filas-1; j++) {
+                if (res[y][j].contains("\u001B[34m")) {
+                    String cambio = res[y][j].replace("\u001B[34m", "\u001B[31m");
+                    res[y][j] = cambio;
+                    y++;
+                } else {
+                    String cambio = res[y][j].replace("\u001B[31m", "\u001B[34m");
+                    res[y][j] = cambio;
+                    y++;
+                }
+            }
+        }
+        return res;
     }
     
     public static void leerTxt() throws FileNotFoundException{
@@ -157,7 +250,7 @@ public class Soliflips {
                    
                       
             in.close();    
-            crearTabla(mat);  
+            crearTablero(mat);  
             } catch (FileNotFoundException e) {
                 System.out.println("Error.");
         }
@@ -171,7 +264,7 @@ public class Soliflips {
         };
     }
     
-    public static void crearTabla(String[][] unaTabla){
+    public static void crearTablero(String[][] unaTabla){
         int filas = unaTabla.length;
         int columnas = unaTabla[0].length;
                 
@@ -212,9 +305,9 @@ public class Soliflips {
         }
     }
     
-    public static void crearTablaConCambio(String[][] unaTablaSinCambio, String[][] unaTablaConCambio) {
+    public static void crearTableroConCambio(String[][] unaTablaSinCambio, String[][] unaTablaConCambio) {
       int filas = unaTablaSinCambio.length;
-        int columnas = unaTablaSinCambio[0].length * 2; //como tenemos que imprimir dos matrices, van a haber doble la cantidad de columnas
+      int columnas = unaTablaSinCambio[0].length * 2; //como tenemos que imprimir dos matrices, van a haber doble la cantidad de columnas
                 
         for (int i = -1; i < filas; i++){
             for (int j = -1; j < columnas; j++){
@@ -360,7 +453,4 @@ public class Soliflips {
         return res;
     }
     
-    public static void main(String[] args) {
-       SetUp();
-    }
 }

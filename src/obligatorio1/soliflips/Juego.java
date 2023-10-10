@@ -6,7 +6,7 @@ public class Juego {
     private ArrayList<Tablero> historialTableros;
     private ArrayList<int[]> historialMovimientos;
     
-    private void addHistorialTableros(Tablero unTablero){
+    public void addHistorialTableros(Tablero unTablero){
         historialTableros.add(unTablero);
     }
     
@@ -38,5 +38,27 @@ public class Juego {
         this.addHistorialTableros(primerTablero);
         
     }
+
+    public boolean seGano(){
+        String[][] tabla = this.getLastTablero().getTabla();
+        boolean res = true;               
+        String primerColor;
+        if (tabla[0][0].contains("\u001B[34m")){
+            primerColor = "\u001B[34m";
+        } else {
+            primerColor = "\u001B[31m";
+        }
+        for (int i = 0; i < tabla.length && !res; i++) {
+            for (int j = 0; j < tabla[0].length && !res; j++) {
+                if (!tabla[i][j].contains(primerColor)) {
+                    res = false;
+                }
+            }
+        }
+        return res;
+    }
 }
+        
+        
+        
 

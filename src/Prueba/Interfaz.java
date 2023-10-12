@@ -4,14 +4,12 @@
  */
 package Prueba;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import obligatorio1.soliflips.Juego;
-import obligatorio1.soliflips.Soliflips;
-import static obligatorio1.soliflips.Soliflips.leerTxt;
-import static obligatorio1.soliflips.Soliflips.randomTabla;
 import obligatorio1.soliflips.Tablero;
 
 /**
@@ -22,6 +20,42 @@ public class Interfaz {
     //private static Tablero tableroInicial;
     public static void main(String[] args) {
         SetUp();
+    }
+    
+    public static String obtenerCodigoColor(String codigo) {
+        return switch (codigo) {
+            case "R" -> "\u001B[31m";
+            case "A" -> "\u001B[34m";
+            default -> "";
+        };
+    }
+    
+    public static void leerTxt() throws FileNotFoundException{
+        try {
+            String Rs = "\033[0m";
+            File file = new File(".\\Test\\datos.txt");
+            Scanner in = new Scanner(file);
+            int m = in.nextInt();
+            int n = in.nextInt();           
+            in.nextLine();
+            String[][] mat = new String[m][n];
+            for (int i = 0; i < m; i++) {
+                String fila = in.nextLine();
+                String[] lista = fila.split(" ");
+                for (int j = 0; j < n; j++) {
+                    String color = obtenerCodigoColor(lista[j].substring(1));
+                    String resto = (lista[j].substring(0, 1));
+                    mat[i][j] = color + resto + Rs;
+                }
+            }
+            int nivel = in.nextInt();
+            in.nextLine();
+             
+            in.close();    
+            mostrarTablero(mat);  
+            } catch (FileNotFoundException e) {
+                System.out.println("Error.");
+        }
     }
     
     public static void SetUp() {
@@ -42,7 +76,7 @@ public class Interfaz {
                     try {
                         leerTxt();
                     } catch (FileNotFoundException ex) {
-                        Logger.getLogger(Soliflips.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
                 else if (ent.equalsIgnoreCase("b")){                   
@@ -70,11 +104,11 @@ public class Interfaz {
                     System.out.println("Ingrese nivel de dificultad (entre 1 y 8)");
                     nivel = in.nextInt();
 
-                    tabla = randomTabla(filas, col, nivel);
+                    tabla = Tablero.randomTabla(filas, col, nivel);
                 }
                 
                 Tablero tableroInicial = new Tablero(tabla, nivel);
-                mostrarTablero(tabla);
+                mostrarTableroConCambio(tabla, tabla);
                 Juego empezarJuego = new Juego(tableroInicial);
                 Jugar(empezarJuego);
             
@@ -163,7 +197,7 @@ public class Interfaz {
     
     public static void mostrarTableroConCambio(String[][] unaTablaSinCambio, String[][] unaTablaConCambio) {
       int filas = unaTablaSinCambio.length;
-      int columnas = unaTablaSinCambio[0].length * 2; //como tenemos que imprimir dos matrices, van a haber doble la cantidad de columnas
+      int columnas = unaTablaSinCambio[0].length; //dos matrices del mismo tamanio - 1 para dar lugar a las flechas
                 
         for (int i = -1; i < filas; i++){
             for (int j = -1; j < columnas; j++){
@@ -185,7 +219,37 @@ public class Interfaz {
                 }
             }
             
-            if (i == -1){
+            if (i != -1){
+                System.out.print("| => ");
+            } else {
+                System.out.print("");
+            }
+            
+            for (int j = -1; j < columnas; j++){
+                if (j == -1){
+                    System.out.print("   ");
+                } else {
+                    System.out.print("+---");
+                }
+            }
+            System.out.print("+");
+            
+            for (int j = -1; j < columnas; j++){
+                if (i == -1){
+                    if (j != -1){
+                        System.out.print(" " + (j+1) + " ");
+                    }
+                    System.out.print(" ");
+                } else {
+                    if (j != -1){
+                        //if letrita == R ...... (en rojo)
+                        //else ..... (en azul)
+                        System.out.print("| " + unaTablaConCambio[i][j] + " ");
+                    }
+                }
+            }
+            
+            if (i != -1){
                 System.out.println();
             } else {
                 System.out.println("|");

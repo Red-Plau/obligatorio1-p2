@@ -2,11 +2,14 @@ package obligatorio1.soliflips;
 
 import java.util.ArrayList;
 
-public class Juego {
+public final class Juego {
     private ArrayList<Tablero> historialTableros;
     private ArrayList<int[]> historialMovimientos;
     
     public void addHistorialTableros(Tablero unTablero){
+        if (historialTableros == null) {
+            historialTableros = new ArrayList();
+        }
         historialTableros.add(unTablero);
     }
     
@@ -48,8 +51,8 @@ public class Juego {
         } else {
             primerColor = "\u001B[31m";
         }
-        for (int i = 0; i < tabla.length && !res; i++) {
-            for (int j = 0; j < tabla[0].length && !res; j++) {
+        for (int i = 0; i < tabla.length && res; i++) {
+            for (int j = 0; j < tabla[0].length && res; j++) {
                 if (!tabla[i][j].contains(primerColor)) {
                     res = false;
                 }

@@ -1,4 +1,4 @@
-package obligatorio1.soliflips;
+package Soliflips;
 
 import java.util.ArrayList;
 

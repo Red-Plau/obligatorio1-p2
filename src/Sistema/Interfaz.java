@@ -2,15 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package Prueba;
+package Sistema;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import obligatorio1.soliflips.Juego;
-import obligatorio1.soliflips.Tablero;
+import Soliflips.Juego;
+import Soliflips.Tablero;
 
 /**
  *

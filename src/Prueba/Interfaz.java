@@ -221,22 +221,13 @@ public class Interfaz {
             
             if (i != -1){
                 System.out.print("| => ");
-            } else {
-                System.out.print("");
             }
-            
-            for (int j = -1; j < columnas; j++){
-                if (j == -1){
-                    System.out.print("   ");
-                } else {
-                    System.out.print("+---");
-                }
-            }
-            System.out.print("+");
             
             for (int j = -1; j < columnas; j++){
                 if (i == -1){
-                    if (j != -1){
+                    if (j == -1){
+                        System.out.print("    ");
+                    } else {
                         System.out.print(" " + (j+1) + " ");
                     }
                     System.out.print(" ");
@@ -250,14 +241,23 @@ public class Interfaz {
             }
             
             if (i != -1){
-                System.out.println();
-            } else {
                 System.out.println("|");
+            } else {
+                System.out.println();
             }
             
             for (int j = -1; j < columnas; j++){
                 if (j == -1){
                     System.out.print("   ");
+                } else {
+                    System.out.print("+---");
+                }
+            }
+            System.out.print("+");
+            
+            for (int j = -1; j < columnas; j++){
+                if (j == -1){
+                    System.out.print("    ");
                 } else {
                     System.out.print("+---");
                 }

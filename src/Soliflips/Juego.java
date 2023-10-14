@@ -1,6 +1,7 @@
 package Soliflips;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public final class Juego {
     private ArrayList<Tablero> historialTableros;
@@ -13,6 +14,10 @@ public final class Juego {
         historialTableros.add(unTablero);
     }
     
+    public ArrayList<Tablero> getAllTableros(){
+        return this.historialTableros;
+    }
+    
     public void deleteLastTablero(){
         historialTableros.remove(historialTableros.size() - 1);
     }
@@ -22,11 +27,20 @@ public final class Juego {
     }
     
     public void addHistorialMovimiento(int[] unMovimiento){
+        if (historialMovimientos == null) {
+            historialMovimientos = new ArrayList();
+        }
         historialMovimientos.add(unMovimiento);
     }
     
     public void deleteLastMovimiento(){
-        historialMovimientos.remove(historialMovimientos.size() - 1);
+        if (historialMovimientos != null) {
+            if (historialMovimientos.isEmpty()) {
+                //nada
+            } else {
+                historialMovimientos.remove(historialMovimientos.size() - 1);
+            }
+        }
     }
     
     public int[] getLastMovimiento(){
@@ -59,6 +73,16 @@ public final class Juego {
             }
         }
         return res;
+    }
+      
+    public String[] movimientostoString() {
+        ArrayList<int[]> hist = this.getAllMovimiento();
+        String[] str = new String[hist.size()];
+        for (int i = 0; i < hist.size(); i++) {            
+            int[] mov = hist.get(i);
+            str[i] = ("(" + mov[0] + ", " + mov[1] + ")");
+        }
+        return str;
     }
 }
         

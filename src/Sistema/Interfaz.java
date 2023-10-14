@@ -20,43 +20,7 @@ public class Interfaz {
     //private static Tablero tableroInicial;
     public static void main(String[] args) {
         SetUp();
-    }
-    
-    public static String obtenerCodigoColor(String codigo) {
-        return switch (codigo) {
-            case "R" -> "\u001B[31m";
-            case "A" -> "\u001B[34m";
-            default -> "";
-        };
-    }
-    
-    public static void leerTxt() throws FileNotFoundException{
-        try {
-            String Rs = "\033[0m";
-            File file = new File(".\\Test\\datos.txt");
-            Scanner in = new Scanner(file);
-            int m = in.nextInt();
-            int n = in.nextInt();           
-            in.nextLine();
-            String[][] mat = new String[m][n];
-            for (int i = 0; i < m; i++) {
-                String fila = in.nextLine();
-                String[] lista = fila.split(" ");
-                for (int j = 0; j < n; j++) {
-                    String color = obtenerCodigoColor(lista[j].substring(1));
-                    String resto = (lista[j].substring(0, 1));
-                    mat[i][j] = color + resto + Rs;
-                }
-            }
-            int nivel = in.nextInt();
-            in.nextLine();
-             
-            in.close();    
-            mostrarTablero(mat);  
-            } catch (FileNotFoundException e) {
-                System.out.println("Error.");
-        }
-    }
+    }  
     
     public static void SetUp() {
         Scanner in = new Scanner(System.in);
@@ -108,7 +72,7 @@ public class Interfaz {
                 }
                 
                 Tablero tableroInicial = new Tablero(tabla, nivel);
-                mostrarTableroConCambio(tabla, tabla);
+                mostrarTablero(tabla);
                 Juego empezarJuego = new Juego(tableroInicial);
                 Jugar(empezarJuego);
             
@@ -121,38 +85,62 @@ public class Interfaz {
     
     public static void Jugar(Juego controlJuego){
         Scanner input = new Scanner(System.in);
-        //Tablero tabActual = controlJuego.getLastTablero();
+        
         int nivel = controlJuego.getLastTablero().getNivel();
         while (!controlJuego.seGano()){
-            int[] movimiento = new int[2];
-            movimiento[0] = input.nextInt();            
             
-            if(movimiento[0] != -1){
-                movimiento[1] = input.nextInt();
-                controlJuego.addHistorialMovimiento(movimiento);
-                Tablero tabActual = controlJuego.getLastTablero();
+            String inputStr = input.next(); // Leer una cadena
+            
+            if (inputStr.equalsIgnoreCase("H")) {
+                String[] movs = controlJuego.movimientostoString();
+                for (String mov : movs) {
+                    System.out.println(mov);
+                }
+            } else if (inputStr.equalsIgnoreCase("S")){
                 
-                String[][] actual = tabActual.getTabla();
-                String[][] cambiada = tabActual.cambiarTabla(movimiento);
-                
-                Tablero tabNuevo = new Tablero(cambiada, nivel);
-                
-                mostrarTableroConCambio(actual, cambiada);
-                
-                controlJuego.addHistorialTableros(tabNuevo);
+            } else if (inputStr.equalsIgnoreCase("X")){
                 
             } else {
-                
-                if(movimiento[0] == -1){
-                    controlJuego.deleteLastTablero();
-                    controlJuego.deleteLastMovimiento();
-                    
-                    mostrarTablero(controlJuego.getLastTablero().getTabla());
+                int[] movimiento = new int[2];
+                movimiento[0] = Integer.parseInt(inputStr);
+
+                if(movimiento[0] != -1){
+                    movimiento[1] = input.nextInt();
+                    controlJuego.addHistorialMovimiento(movimiento);
+                    Tablero tabActual = controlJuego.getLastTablero();
+
+                    String[][] actual = tabActual.getTabla();
+                    String[][] cambiada = tabActual.cambiarTabla(movimiento);
+
+                    Tablero tabNuevo = new Tablero(cambiada, nivel);
+
+                    mostrarTableroConCambio(actual, cambiada);
+
+                    controlJuego.addHistorialTableros(tabNuevo);
+
+                } else {
+
+                    if(movimiento[0] == -1){
+                        if (controlJuego.getAllTableros().size() == 1){
+                            controlJuego.deleteLastMovimiento();
+                            mostrarTablero(controlJuego.getLastTablero().getTabla());
+                        } else {
+                            controlJuego.deleteLastTablero();
+                            controlJuego.deleteLastMovimiento();
+
+                            mostrarTablero(controlJuego.getLastTablero().getTabla());
+                        }    
+                    }
+                    if (movimiento[0] == 'H' || movimiento[0] == 'h') {
+                        String[] movs = controlJuego.movimientostoString();
+                        for (String mov : movs) {
+                            System.out.println(mov);
+                        }
+                    }
                 }
             }
         }
-    }
-                
+    }            
 
     public static void mostrarTablero(String[][] unaTabla){
         int filas = unaTabla.length;
@@ -264,5 +252,41 @@ public class Interfaz {
             }
             System.out.println("+");
         }  
+    }
+    
+    public static String obtenerCodigoColor(String codigo) {
+        return switch (codigo) {
+            case "R" -> "\u001B[31m";
+            case "A" -> "\u001B[34m";
+            default -> "";
+        };
+    }
+    
+    public static void leerTxt() throws FileNotFoundException{
+        try {
+            String Rs = "\033[0m";
+            File file = new File(".\\Test\\datos.txt");
+            Scanner in = new Scanner(file);
+            int m = in.nextInt();
+            int n = in.nextInt();           
+            in.nextLine();
+            String[][] mat = new String[m][n];
+            for (int i = 0; i < m; i++) {
+                String fila = in.nextLine();
+                String[] lista = fila.split(" ");
+                for (int j = 0; j < n; j++) {
+                    String color = obtenerCodigoColor(lista[j].substring(1));
+                    String resto = (lista[j].substring(0, 1));
+                    mat[i][j] = color + resto + Rs;
+                }
+            }
+            int nivel = in.nextInt();
+            in.nextLine();
+             
+            in.close();    
+            mostrarTablero(mat);  
+            } catch (FileNotFoundException e) {
+                System.out.println("Error.");
+        }
     }
 }

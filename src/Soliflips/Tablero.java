@@ -50,11 +50,15 @@ public class Tablero {
     }
     
     public String[][] cambiarTabla(int[] mov){
-        String[][] res = this.getTabla();
+        String[][] res = new String[tabla.length][tabla[0].length];
+        for (int i = 0; i < tabla.length; i++) {
+            System.arraycopy(tabla[i], 0, res[i], 0, tabla[i].length);
+        }
         int filas = res.length;
         int col = res[0].length;
-        int filaC = mov[0];
-        int colC = mov[1];
+        int filaC = mov[0]-1;
+        int colC = mov[1]-1;
+        System.out.println(filaC+1 + ", " + (colC+1));
         String sym = res[filaC][colC];
         
         if (sym.contains("-")){
@@ -146,7 +150,7 @@ public class Tablero {
             Random r = new Random();
             int filaR = r.nextInt(filas);
             int colR = r.nextInt(col);
-            String sym = res[filaR][colR];
+            String sym = res[filaR][colR];            
             System.out.println(filaR+1 + ", " + (colR+1));
             if (sym.contains("-")){
                 for (int j = 0; j < col; j++) {
@@ -237,3 +241,8 @@ public class Tablero {
         return res;
     }
 }
+
+        
+        
+        
+        

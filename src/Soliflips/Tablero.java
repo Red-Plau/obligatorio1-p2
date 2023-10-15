@@ -1,12 +1,14 @@
 package Soliflips;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 public class Tablero {
     private String[][] tabla;
-    private int[] solucion;
+    private ArrayList<int[]> solucion;
     private int nivel;
-    //agregar arraylist de movimientos
     
     public void setTabla(String[][] unaTabla) {
         tabla = unaTabla;
@@ -16,11 +18,7 @@ public class Tablero {
         return this.tabla;
     }
     
-    public void setSolucion(int[] unaSolucion) {
-        solucion = unaSolucion;
-    }
-    
-    public int[] getSolucion() {
+    public ArrayList<int[]> getSolucion() {
         return solucion;
     }
     
@@ -31,11 +29,25 @@ public class Tablero {
     public int getNivel() {
         return nivel;
     }
-    
-    public Tablero() {
-        //tabla = new String[0][0];
-        solucion = new int[0];
-        nivel = 0;
+        
+    public Tablero(){
+        String R = "\u001B[31m";
+        String B = "\u001B[34m";
+        String Rs = "\033[0m";
+        String[][] predef = {
+            {B + "|" + Rs, B + "|" + Rs, R + "-" + Rs, B + "/" + Rs, R + "|" + Rs, R + "-" + Rs},
+            {R + "-" + Rs, B + "/" + Rs, B + "/" + Rs, B + "|" + Rs, R + "-" + Rs, R + "-" + Rs},
+            {R + "-" + Rs, R + "-" + Rs, B + "|" + Rs, R + "-" + Rs, R + "/" + Rs, R + "-" + Rs},
+            {R + "\\" + Rs, R + "-" + Rs, R + "|" + Rs, R + "\\" + Rs, B + "|" + Rs, R + "|" + Rs},
+            {R + "\\" + Rs, R + "/" + Rs, R + "/" + Rs, B + "|" + Rs, B + "/" + Rs, B + "\\" + Rs}
+        };
+        tabla = predef;
+        nivel = 3;
+        ArrayList<int[]> coso = new ArrayList<>();
+        coso.add(new int[]{5, 6});
+        coso.add(new int[]{4, 4});
+        coso.add(new int[]{2, 4});
+        solucion = coso;
     }
     
     public Tablero(String[][] unaTabla, int unNivel){
@@ -44,8 +56,8 @@ public class Tablero {
     }
     
     public Tablero(int cantFilas, int cantColumnas, int unNivel) {
-        //tabla = new Tabla[cantFilas][cantColumnas];
-        solucion = new int[unNivel]; //en random agregar array de solucion
+        tabla = randomTabla(cantFilas, cantColumnas, unNivel);
+        //solucion = new int[unNivel]; //en random agregar array de solucion
         nivel = unNivel;
     }
     
@@ -135,8 +147,11 @@ public class Tablero {
         return res;
     }
 
-    public static String[][] randomTabla(int filas, int col, int nivel){
-        //String RED = "\u001B[31m";
+    public void setSolucion(ArrayList<int[]> array){
+        solucion = array;
+    }
+    
+    private String[][] randomTabla(int filas, int col, int nivel){        
         String BLUE = "\u001B[34m";
         String RESET = "\033[0m";
         String[][] res = new String[filas][col];
@@ -145,13 +160,29 @@ public class Tablero {
                 res[i][j] = BLUE + String.valueOf(random()) + RESET;               
             }
         }
+        Set<String> coordenadasUsadas = new HashSet<>();
+        ArrayList<int[]> listaRandoms = new ArrayList<>();
+        Random r = new Random();
         
-        for (int i = 0; i < nivel; i++) {
-            Random r = new Random();
-            int filaR = r.nextInt(filas);
-            int colR = r.nextInt(col);
+        for (int i = 0; i < nivel; i++) {            
+            int filaR;
+            int colR;
+            String coordenada;
+            do {
+                filaR = r.nextInt(filas);
+                colR = r.nextInt(col);
+                coordenada = filaR + "," + colR;
+            } while (coordenadasUsadas.contains(coordenada));
+            
+            coordenadasUsadas.add(coordenada);
+            
+            int[] movimientoR = {filaR+1, colR+1}; 
+            listaRandoms.add(movimientoR);
+            this.setSolucion(listaRandoms);
+            
             String sym = res[filaR][colR];            
-            System.out.println(filaR+1 + ", " + (colR+1));
+            System.out.println(filaR+1 + ", " + (colR+1));                        
+            
             if (sym.contains("-")){
                 for (int j = 0; j < col; j++) {
                     if (res[filaR][j].contains("\u001B[34m")){
@@ -226,6 +257,7 @@ public class Tablero {
         }     
         return res;
     }
+    
     public static char random(){
         double value = Math.random();
         char res;

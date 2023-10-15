@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import Soliflips.Juego;
 import Soliflips.Tablero;
+import java.util.ArrayList;
 
 /**
  *
@@ -19,67 +20,66 @@ import Soliflips.Tablero;
 public class Interfaz {
     //private static Tablero tableroInicial;
     public static void main(String[] args) {
-        SetUp();
-    }  
-    
-    public static void SetUp() {
         Scanner in = new Scanner(System.in);
         System.out.println("Desea jugar?");
         String ent = in.nextLine();
         if (ent.equalsIgnoreCase("SI")){
-            System.out.println("a) Tomar los datos del archivo \"datos.txt\"");
-            System.out.println("b) Usar el tablero predefinido");
-            System.out.println("c) Usar un tablero al azar");
-            
+            SetUp();
+        } else {
+            System.out.println("Bueno chau");
+        }
+    }  
+    
+    public static void SetUp() {
+        Scanner in = new Scanner(System.in);
+        
+        //String ent = in.nextLine();
+        
+        System.out.println("a) Tomar los datos del archivo \"datos.txt\"");
+        System.out.println("b) Usar el tablero predefinido");
+        System.out.println("c) Usar un tablero al azar");
+
+        String ent = in.nextLine();
+        while (!(ent.equalsIgnoreCase("a")) && !(ent.equalsIgnoreCase("b")) && !(ent.equalsIgnoreCase("c"))){
+            System.out.println("A ver, boludito, que haces?");
             ent = in.nextLine();
-            if ((ent.equalsIgnoreCase("a")) || (ent.equalsIgnoreCase("b")) || (ent.equalsIgnoreCase("c"))){
-                String[][] tabla = null;
-                int nivel = 0;
-                
-                if (ent.equalsIgnoreCase("a")){
-                    try {
-                        leerTxt();
-                    } catch (FileNotFoundException ex) {
-                        Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                else if (ent.equalsIgnoreCase("b")){                   
-                    String R = "\u001B[31m";
-                    String B = "\u001B[34m";
-                    String Rs = "\033[0m";
+        }
+        
+        String[][] tabla = null;
+        int nivel = 0;
+        Tablero tableroInicial = null;
 
-                    String[][] predef = {
-                        {B + "|" + Rs, B + "|" + Rs, R + "-" + Rs, B + "/" + Rs, R + "|" + Rs, R + "-" + Rs},
-                        {R + "-" + Rs, B + "/" + Rs, B + "/" + Rs, B + "|" + Rs, R + "-" + Rs, R + "-" + Rs},
-                        {R + "-" + Rs, R + "-" + Rs, B + "|" + Rs, R + "-" + Rs, R + "/" + Rs, R + "-" + Rs},
-                        {R + "\\" + Rs, R + "-" + Rs, R + "|" + Rs, R + "\\" + Rs, B + "|" + Rs, R + "|" + Rs},
-                        {R + "\\" + Rs, R + "/" + Rs, R + "/" + Rs, B + "|" + Rs, B + "/" + Rs, B + "\\" + Rs}
-                    };
-
-                    tabla = predef;
-                    nivel = 3;
-                }
-                else {
-                    //crear tabla con matriz[fila][columna] random
-                    System.out.println("Ingrese cantidad de filas (entre 3 y 9)");
-                    int filas = in.nextInt();
-                    System.out.println("Ingrese cantidad de columnas (entre 3 y 9)");
-                    int col = in.nextInt();
-                    System.out.println("Ingrese nivel de dificultad (entre 1 y 8)");
-                    nivel = in.nextInt();
-
-                    tabla = Tablero.randomTabla(filas, col, nivel);
-                }
-                
-                Tablero tableroInicial = new Tablero(tabla, nivel);
-                mostrarTablero(tabla);
-                Juego empezarJuego = new Juego(tableroInicial);
-                Jugar(empezarJuego);
-            
-            } else {
-                   
+        if (ent.equalsIgnoreCase("a")){
+            try {
+                tableroInicial = leerTxt();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        else if (ent.equalsIgnoreCase("b")){                   
+
+            tableroInicial = new Tablero();                    
+        }
+        else {
+
+            System.out.println("Ingrese cantidad de filas (entre 3 y 9)");
+            int filas = in.nextInt();
+            System.out.println("Ingrese cantidad de columnas (entre 3 y 9)");
+            int col = in.nextInt();
+            System.out.println("Ingrese nivel de dificultad (entre 1 y 8)");
+            nivel = in.nextInt();
+
+            tableroInicial = new Tablero(filas, col, nivel);                    
+        }
+
+        if (tableroInicial == null) {
+            tableroInicial = new Tablero(tabla, nivel);
+        }
+
+        mostrarTablero(tableroInicial.getTabla());
+
+        Juego empezarJuego = new Juego(tableroInicial);
+        Jugar(empezarJuego);
     }
                 
     
@@ -87,6 +87,7 @@ public class Interfaz {
         Scanner input = new Scanner(System.in);
         
         int nivel = controlJuego.getLastTablero().getNivel();
+        Boolean x = false;
         while (!controlJuego.seGano()){
             
             String inputStr = input.next(); // Leer una cadena
@@ -97,9 +98,19 @@ public class Interfaz {
                     System.out.println(mov);
                 }
             } else if (inputStr.equalsIgnoreCase("S")){
-                
+                //mostrar movimientos para ganar()
+                if (controlJuego.getAllMovimientos() != null) {
+                    for (int i = (controlJuego.getAllMovimientos().size() - 1); i >= 0; i--){
+                        System.out.println((controlJuego.getAllMovimientos().get(i)[0]) + ", " + controlJuego.getAllMovimientos().get(i)[1]);
+                    }
+                }
+                for (int i = (controlJuego.getSolucionInicial().size() - 1); i >= 0 ; i--){
+                    System.out.println(controlJuego.getSolucionInicial().get(i)[0] + ", " + controlJuego.getSolucionInicial().get(i)[1]);
+                }
             } else if (inputStr.equalsIgnoreCase("X")){
-                
+                x = true;
+                System.out.println("perdiste caraepinga");
+                break;
             } else {
                 int[] movimiento = new int[2];
                 movimiento[0] = Integer.parseInt(inputStr);
@@ -131,14 +142,13 @@ public class Interfaz {
                             mostrarTablero(controlJuego.getLastTablero().getTabla());
                         }    
                     }
-                    if (movimiento[0] == 'H' || movimiento[0] == 'h') {
-                        String[] movs = controlJuego.movimientostoString();
-                        for (String mov : movs) {
-                            System.out.println(mov);
-                        }
-                    }
                 }
             }
+        }
+        if (!x) {
+            System.out.println("Has ganado!!!!!!!!!");
+            System.out.println("Desea jugar de nuevo?");
+            //if si setup
         }
     }            
 
@@ -262,7 +272,7 @@ public class Interfaz {
         };
     }
     
-    public static void leerTxt() throws FileNotFoundException{
+    public static Tablero leerTxt() throws FileNotFoundException{
         try {
             String Rs = "\033[0m";
             File file = new File(".\\Test\\datos.txt");
@@ -282,11 +292,25 @@ public class Interfaz {
             }
             int nivel = in.nextInt();
             in.nextLine();
-             
-            in.close();    
-            mostrarTablero(mat);  
+            
+            ArrayList<int[]> solucion = new ArrayList<>();
+            for (int i = 0; i < nivel; i++) {
+                int[] coor = new int[2];
+                coor[0] = in.nextInt();
+                coor[1] = in.nextInt();
+                solucion.add(coor);                
+            }
+ 
+            in.close();   
+            
+            Tablero ini = new Tablero(mat, nivel);
+            ini.setSolucion(solucion);
+            return ini;
+            
             } catch (FileNotFoundException e) {
                 System.out.println("Error.");
         }
+        return null;
     }
 }
+        

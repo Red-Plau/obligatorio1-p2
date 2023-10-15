@@ -1,11 +1,11 @@
 package Soliflips;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public final class Juego {
     private ArrayList<Tablero> historialTableros;
     private ArrayList<int[]> historialMovimientos;
+    private ArrayList<int[]> solucionInicial;
     
     public void addHistorialTableros(Tablero unTablero){
         if (historialTableros == null) {
@@ -47,15 +47,30 @@ public final class Juego {
         return historialMovimientos.get(historialMovimientos.size() - 1);
     }
     
-    public ArrayList<int[]> getAllMovimiento(){
+    public ArrayList<int[]> getAllMovimientos(){
         return historialMovimientos;
+    }
+    
+    public void setSolucionInicial(ArrayList<int[]> array){
+        solucionInicial = array;
+    }
+    
+    public ArrayList<int[]> getSolucionInicial(){
+        return solucionInicial;
     }
     
     public Juego(Tablero primerTablero){
         this.addHistorialTableros(primerTablero);
-        
+        this.setSolucionInicial(primerTablero.getSolucion());
     }
 
+    /*public String[] secuenciaGanadora(){
+        int movs = this.getAllMovimientos().size();
+        int ini = this.getSolucionInicial().size();
+        
+        String[] res = new String[movs + ini];
+    }*/
+    
     public boolean seGano(){
         String[][] tabla = this.getLastTablero().getTabla();
         boolean res = true;               
@@ -76,7 +91,7 @@ public final class Juego {
     }
       
     public String[] movimientostoString() {
-        ArrayList<int[]> hist = this.getAllMovimiento();
+        ArrayList<int[]> hist = this.getAllMovimientos();
         String[] str = new String[hist.size()];
         for (int i = 0; i < hist.size(); i++) {            
             int[] mov = hist.get(i);

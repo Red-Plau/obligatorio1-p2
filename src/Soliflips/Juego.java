@@ -92,7 +92,7 @@ public final class Juego {
         return str;
     }
     
-        public Juego(Tablero primerTablero){
+    public Juego(Tablero primerTablero){
         this.addHistorialTableros(primerTablero);
         this.setSolucionInicial(primerTablero.getSolucion());
     }

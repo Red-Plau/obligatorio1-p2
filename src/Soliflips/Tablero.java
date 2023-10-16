@@ -1,3 +1,7 @@
+//AUTORES:
+//  Laura Soumastre [317667]
+//  Marcos Eppinger [203654]
+
 package Soliflips;
 
 import java.util.ArrayList;
@@ -16,6 +20,10 @@ public class Tablero {
     
     public String[][] getTabla() {
         return this.tabla;
+    }
+    
+    public void setSolucion(ArrayList<int[]> array){
+        solucion = array;
     }
     
     public ArrayList<int[]> getSolucion() {
@@ -59,6 +67,21 @@ public class Tablero {
         tabla = randomTabla(cantFilas, cantColumnas, unNivel);
         //solucion = new int[unNivel]; //en random agregar array de solucion
         nivel = unNivel;
+    }
+    
+    public static char random(){
+        double value = Math.random();
+        char res;
+        if (value < 0.25){
+            res = '/';
+        }else if (value < 0.50){
+            res = '-';
+        }else if (value < 0.75){
+            res = '\\';
+        }else{
+            res = '|';
+        }
+        return res;
     }
     
     public String[][] cambiarTabla(int[] mov){
@@ -145,10 +168,6 @@ public class Tablero {
             }
         }
         return res;
-    }
-
-    public void setSolucion(ArrayList<int[]> array){
-        solucion = array;
     }
     
     private String[][] randomTabla(int filas, int col, int nivel){        
@@ -257,24 +276,4 @@ public class Tablero {
         }     
         return res;
     }
-    
-    public static char random(){
-        double value = Math.random();
-        char res;
-        if (value < 0.25){
-            res = '/';
-        }else if (value < 0.50){
-            res = '-';
-        }else if (value < 0.75){
-            res = '\\';
-        }else{
-            res = '|';
-        }
-        return res;
-    }
 }
-
-        
-        
-        
-        

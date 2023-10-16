@@ -1,3 +1,7 @@
+//AUTORES:
+//  Laura Soumastre [317667]
+//  Marcos Eppinger [203654]
+
 package Soliflips;
 
 import java.util.ArrayList;
@@ -59,18 +63,6 @@ public final class Juego {
         return solucionInicial;
     }
     
-    public Juego(Tablero primerTablero){
-        this.addHistorialTableros(primerTablero);
-        this.setSolucionInicial(primerTablero.getSolucion());
-    }
-
-    /*public String[] secuenciaGanadora(){
-        int movs = this.getAllMovimientos().size();
-        int ini = this.getSolucionInicial().size();
-        
-        String[] res = new String[movs + ini];
-    }*/
-    
     public boolean seGano(){
         String[][] tabla = this.getLastTablero().getTabla();
         boolean res = true;               
@@ -90,7 +82,7 @@ public final class Juego {
         return res;
     }
       
-    public String[] movimientostoString() {
+    public String[] movimientosToString() {
         ArrayList<int[]> hist = this.getAllMovimientos();
         String[] str = new String[hist.size()];
         for (int i = 0; i < hist.size(); i++) {            
@@ -99,8 +91,9 @@ public final class Juego {
         }
         return str;
     }
+    
+        public Juego(Tablero primerTablero){
+        this.addHistorialTableros(primerTablero);
+        this.setSolucionInicial(primerTablero.getSolucion());
+    }
 }
-        
-        
-        
-

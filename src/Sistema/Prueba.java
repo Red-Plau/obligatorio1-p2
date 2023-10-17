@@ -23,7 +23,7 @@ public class Prueba {
         if (ent.equalsIgnoreCase("si")){
             SetUp();
         } else {
-            System.out.println("Bueno chau");
+            System.out.println("Adios!");
         }
     }
 }

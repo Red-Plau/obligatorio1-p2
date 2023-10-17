@@ -25,13 +25,13 @@ public class Interfaz {
 
         String ent = in.nextLine();
         while (!(ent.equalsIgnoreCase("a")) && !(ent.equalsIgnoreCase("b")) && !(ent.equalsIgnoreCase("c"))){
-            System.out.println("A ver, boludito, que haces?");
+            System.out.println("* Por favor ingrese una de las opciones indicadas (A / B / C)");
             ent = in.nextLine();
         }
         
         int nivel;
         Tablero tableroInicial = null;
-
+        
         if (ent.equalsIgnoreCase("a")){
             try {
                 tableroInicial = leerTxt();
@@ -74,13 +74,28 @@ public class Interfaz {
     
     public static void Jugar(Juego controlJuego){
         Scanner input = new Scanner(System.in);
+        //Empezamos a contar el tiempo desde el comienzo de la partida.
         long tiempoInicio = System.nanoTime();
         
         int nivel = controlJuego.getLastTablero().getNivel();
-        Boolean x = false;
+        Boolean x = false; //Controla si el jugador eligio la opcion X.
         while (!(controlJuego.seGano() || x)){
             
-            String inputStr = input.next(); // Leer una cadena
+            String inputStr = input.next();
+            
+            //Mientras la entrada sea de formato invalido, se repitira que re-ingrese los datos.
+            while (!(esNumero(inputStr) 
+                    || (!esNumero(inputStr) && (inputStr.equalsIgnoreCase("H") || inputStr.equalsIgnoreCase("S") || inputStr.equalsIgnoreCase("X"))))){
+                System.out.println("""
+                    INVALIDO. Por favor ingrese:
+                       > S para ver una posible solucion
+                       > H para ver un historial de sus movimientos
+                       > X para terminar el juego
+                       > -1 -1 si quiere retroceder
+                       > dos coordenadas dentro del rango del tamaño de la tabla""");
+                
+                inputStr = input.next();
+            }
             
             if (inputStr.equalsIgnoreCase("H")) {
                 String[] movs = controlJuego.movimientosToString();
@@ -89,23 +104,36 @@ public class Interfaz {
                     System.out.println(mov);
                 }
             } else if (inputStr.equalsIgnoreCase("S")){
-                //mostrar movimientos para ganar()
+                //Se imprime una solucion de manera que el jugador "retroceda" hasta el primer movimiento...
                 if (controlJuego.getAllMovimientos() != null) {
                     for (int i = (controlJuego.getAllMovimientos().size() - 1); i >= 0; i--){
                         System.out.println("(" + (controlJuego.getAllMovimientos().get(i)[0]) + ", " + controlJuego.getAllMovimientos().get(i)[1] + ")");
                     }
                 }
+                
+                //...y luego se imprime la solucion del tablero.
                 for (int i = (controlJuego.getSolucionInicial().size() - 1); i >= 0 ; i--){
                     System.out.println("(" + controlJuego.getSolucionInicial().get(i)[0] + ", " + controlJuego.getSolucionInicial().get(i)[1] + ")");
                 }
             } else if (inputStr.equalsIgnoreCase("X")){
                 x = true;
-                System.out.println("perdiste caraepinga");
+                System.out.println("Adios!");
             } else {
+                //Si se detecta una primera coordenada, armamos sistema de coordenadas.
                 int[] movimiento = new int[2];
                 movimiento[0] = Integer.parseInt(inputStr);
-                movimiento[1] = input.nextInt();
                 
+                inputStr = input.next();
+                
+                if (esNumero(inputStr)) {
+                    //Si la siguiente "coordenada" es un numero, se aceptara como valor.
+                    movimiento[1] = Integer.parseInt(inputStr);
+                } else {
+                    //En caso contrario, la segunda coordenada sera un numero invalido.
+                    movimiento[1] = controlJuego.getLastTablero().getTabla()[0].length + 1;
+                }
+                
+                //Mientras sean invalidos las entradas (menor o mayor al tamanio de la tabla o no (-1, -1)) se repitira que re-ingrese los datos.
                 while (!(movimiento[0] == -1 && movimiento[1] == -1) &&
                         (movimiento[0] < 1 || movimiento[0] > controlJuego.getLastTablero().getTabla().length 
                         || movimiento[1] < 1 || movimiento[1] > controlJuego.getLastTablero().getTabla()[0].length)){
@@ -114,8 +142,21 @@ public class Interfaz {
                                        > -1 -1 si quiere retroceder
                                        > dos coordenadas dentro del rango del tamaño de la tabla""");
                     
-                    movimiento[0] = input.nextInt();
-                    movimiento[1] = input.nextInt();
+                    inputStr = input.next();
+                    
+                    if (esNumero(inputStr)) {
+                        movimiento[0] = Integer.parseInt(inputStr);
+                    } else {
+                        movimiento[0] = controlJuego.getLastTablero().getTabla().length + 1;
+                    }
+                    
+                    inputStr = input.next();
+                    
+                    if (esNumero(inputStr)) {
+                        movimiento[1] = Integer.parseInt(inputStr);
+                    } else {
+                        movimiento[1] = controlJuego.getLastTablero().getTabla()[0].length + 1;
+                    }
                 }
                 
                 if(movimiento[0] != -1){
@@ -130,17 +171,15 @@ public class Interfaz {
 
                     controlJuego.addHistorialTableros(tabNuevo);
                 } else {
-                    if(movimiento[0] == -1){
-                        if (controlJuego.getAllTableros().size() == 1){
-                            controlJuego.deleteLastMovimiento();
-                            
-                            mostrarTablero(controlJuego.getLastTablero().getTabla());
-                        } else {
-                            controlJuego.deleteLastTablero();
-                            controlJuego.deleteLastMovimiento();
-                            
-                            mostrarTablero(controlJuego.getLastTablero().getTabla());
-                        }    
+                    if (controlJuego.getAllTableros().size() == 1){
+                        controlJuego.deleteLastMovimiento();
+                        
+                        mostrarTablero(controlJuego.getLastTablero().getTabla());
+                    } else {
+                        controlJuego.deleteLastTablero();
+                        controlJuego.deleteLastMovimiento();
+                        
+                        mostrarTablero(controlJuego.getLastTablero().getTabla());   
                     }
                 }
             }
@@ -158,8 +197,8 @@ public class Interfaz {
             long segundos = (milisegundos % 60000) / 1000;
             long milisegundosRestantes = milisegundos % 1000;
             
-            System.out.println("Has ganado!!!!!!!!!");
-            System.out.println("Tiempo insumido  -  " + horas + " : " + minutos + " : " + segundos + " . " + milisegundosRestantes);
+            System.out.println("Has ganado!");
+            System.out.println("Tiempo insumido  -  " + horas + ":" + minutos + ":" + segundos + "." + milisegundosRestantes);
             
             System.out.println("Desea jugar de nuevo?");
             String inputStr = input.next();
@@ -167,7 +206,7 @@ public class Interfaz {
             if (inputStr.equalsIgnoreCase("si")){
                 SetUp();
             } else {
-                System.out.println("chau loco suerte");
+                System.out.println("Adios!");
             }
         }
     }            
@@ -189,8 +228,6 @@ public class Interfaz {
                     if (j == -1){
                         System.out.print(" " + (i+1) + " ");
                     } else {
-                        //if letrita == R ...... (en rojo)
-                        //else ..... (en azul)
                         System.out.print("| " + unaTabla[i][j] + " ");
                     }
                 }
@@ -215,7 +252,7 @@ public class Interfaz {
     
     public static void mostrarTableroConCambio(String[][] unaTablaSinCambio, String[][] unaTablaConCambio) {
       int filas = unaTablaSinCambio.length;
-      int columnas = unaTablaSinCambio[0].length; //dos matrices del mismo tamanio - 1 para dar lugar a las flechas
+      int columnas = unaTablaSinCambio[0].length; //Dos matrices del mismo tamanio - 1 para dar lugar a las flechas
                 
         for (int i = -1; i < filas; i++){
             for (int j = -1; j < columnas; j++){
@@ -288,6 +325,15 @@ public class Interfaz {
         };
     }
     
+    public static boolean esNumero(String cadena) { 
+        try {  
+            double intento = Double.parseDouble(cadena);  
+            return true;
+        } catch(NumberFormatException e){  
+            return false;  
+        }  
+    }
+    
     public static Tablero leerTxt() throws FileNotFoundException{
         try {
             String Rs = "\033[0m";
@@ -296,6 +342,7 @@ public class Interfaz {
             String[][] mat;
             int nivel;
             ArrayList<int[]> solucion;
+            
             try (Scanner in = new Scanner(file)) {
                 int m = in.nextInt();
                 int n = in.nextInt();
@@ -330,9 +377,9 @@ public class Interfaz {
             ini.setSolucion(solucion);
             
             return ini;
-            } catch (FileNotFoundException e) {
-                System.out.println("Error.");
-            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Error en la lectura de datos.");
+        }
         
         return null;
     }

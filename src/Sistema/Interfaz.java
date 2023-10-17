@@ -144,7 +144,7 @@ public class Interfaz {
                     System.out.println("""
                                        INVALIDO. Por favor ingrese:
                                        > -1 -1 si quiere retroceder
-                                       > dos coordenadas dentro del rango del tamaño de la tabla""");
+                                       > Dos coordenadas dentro del rango de la tabla""");
                     
                     inputStr = input.next();
                     

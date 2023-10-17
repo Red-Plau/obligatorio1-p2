@@ -204,10 +204,15 @@ public class Interfaz {
             System.out.println("¡Has ganado!");
             System.out.println("Tiempo insumido  -  " + horas + ":" + minutos + ":" + segundos + "." + milisegundosRestantes);
             
-            System.out.println("Desea jugar de nuevo?");
-            String inputStr = input.next();
+            System.out.println("Desea jugar? (SI / NO)");
+            String ent = input.nextLine();
+        
+            while (!(ent.equalsIgnoreCase("si") || ent.equalsIgnoreCase("no"))){
+                System.out.println("* Por favor ingrese una de las opciones indicadas (SI / NO)");
+                ent = input.nextLine();
+            }
             
-            if (inputStr.equalsIgnoreCase("si")){
+            if (ent.equalsIgnoreCase("si")){
                 SetUp();
             } else {
                 System.out.println("Adios!");

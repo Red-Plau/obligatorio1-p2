@@ -34,6 +34,7 @@ public final class Juego {
         if (historialMovimientos == null) {
             historialMovimientos = new ArrayList();
         }
+        
         historialMovimientos.add(unMovimiento);
     }
     
@@ -67,11 +68,13 @@ public final class Juego {
         String[][] tabla = this.getLastTablero().getTabla();
         boolean res = true;               
         String primerColor;
+        
         if (tabla[0][0].contains("\u001B[34m")){
             primerColor = "\u001B[34m";
         } else {
             primerColor = "\u001B[31m";
         }
+        
         for (int i = 0; i < tabla.length && res; i++) {
             for (int j = 0; j < tabla[0].length && res; j++) {
                 if (!tabla[i][j].contains(primerColor)) {
@@ -79,16 +82,20 @@ public final class Juego {
                 }
             }
         }
+        
         return res;
     }
       
     public String[] movimientosToString() {
         ArrayList<int[]> hist = this.getAllMovimientos();
+        
         String[] str = new String[hist.size()];
+        
         for (int i = 0; i < hist.size(); i++) {            
             int[] mov = hist.get(i);
             str[i] = ("(" + mov[0] + ", " + mov[1] + ")");
         }
+        
         return str;
     }
     

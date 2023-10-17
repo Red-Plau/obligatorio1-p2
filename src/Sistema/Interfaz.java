@@ -121,7 +121,7 @@ public class Interfaz {
                 }
             } else if (inputStr.equalsIgnoreCase("X")){
                 x = true;
-                System.out.println("Adios!");
+                System.out.println("¡Adios!");
             } else {
                 //Si se detecta una primera coordenada, armamos sistema de coordenadas.
                 int[] movimiento = new int[2];
@@ -204,7 +204,7 @@ public class Interfaz {
             System.out.println("¡Has ganado!");
             System.out.println("Tiempo insumido  -  " + horas + ":" + minutos + ":" + segundos + "." + milisegundosRestantes);
             
-            System.out.println("Desea jugar? (SI / NO)");
+            System.out.println("¿Desea jugar de nuevo? (SI / NO)");
             String ent = input.next();
         
             while (!(ent.equalsIgnoreCase("si") || ent.equalsIgnoreCase("no"))){
@@ -215,7 +215,7 @@ public class Interfaz {
             if (ent.equalsIgnoreCase("si")){
                 SetUp();
             } else {
-                System.out.println("Adios!");
+                System.out.println("¡Adios!");
             }
         }
     }            

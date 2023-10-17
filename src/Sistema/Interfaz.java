@@ -98,12 +98,16 @@ public class Interfaz {
             }
             
             if (inputStr.equalsIgnoreCase("H")) {
-                String[] movs = controlJuego.movimientosToString();
-                
-                for (String mov : movs) {
-                    System.out.println(mov);
+                //SI HAY MOVIMIENTOS EN EL HISTORIAL, los imprime todos.
+                if (controlJuego.getAllMovimientos() != null) {
+                    String[] movs = controlJuego.movimientosToString();
+
+                    for (String mov : movs) {
+                        System.out.println(mov);
+                    }
                 }
             } else if (inputStr.equalsIgnoreCase("S")){
+                //SI HAY MOVIMIENTOS EN EL HISTORIAL:
                 //Se imprime una solucion de manera que el jugador "retroceda" hasta el primer movimiento...
                 if (controlJuego.getAllMovimientos() != null) {
                     for (int i = (controlJuego.getAllMovimientos().size() - 1); i >= 0; i--){
@@ -197,7 +201,7 @@ public class Interfaz {
             long segundos = (milisegundos % 60000) / 1000;
             long milisegundosRestantes = milisegundos % 1000;
             
-            System.out.println("Has ganado!");
+            System.out.println("¡Has ganado!");
             System.out.println("Tiempo insumido  -  " + horas + ":" + minutos + ":" + segundos + "." + milisegundosRestantes);
             
             System.out.println("Desea jugar de nuevo?");

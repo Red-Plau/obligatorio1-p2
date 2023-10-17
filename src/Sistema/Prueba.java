@@ -18,8 +18,14 @@ public class Prueba {
                            (c) 2023 Laura Soumastre [317667], Marcos Eppinger [203654]
                            """);
         
-        System.out.println("Desea jugar?");
+        System.out.println("Desea jugar? (SI / NO)");
         String ent = in.nextLine();
+        
+        while (!(ent.equalsIgnoreCase("si") || ent.equalsIgnoreCase("no"))){
+            System.out.println("* Por favor ingrese una de las opciones indicadas (SI / NO)");
+            ent = in.nextLine();
+        }
+        
         if (ent.equalsIgnoreCase("si")){
             SetUp();
         } else {

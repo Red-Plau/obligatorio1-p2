@@ -51,11 +51,11 @@ public class Tablero {
         };
         tabla = predef;
         nivel = 3;
-        ArrayList<int[]> coso = new ArrayList<>();
-        coso.add(new int[]{5, 6});
-        coso.add(new int[]{4, 4});
-        coso.add(new int[]{2, 4});
-        solucion = coso;
+        ArrayList<int[]> coordenadas = new ArrayList<>();
+        coordenadas.add(new int[]{5, 6});
+        coordenadas.add(new int[]{4, 4});
+        coordenadas.add(new int[]{2, 4});
+        solucion = coordenadas;
     }
     
     public Tablero(String[][] unaTabla, int unNivel){
